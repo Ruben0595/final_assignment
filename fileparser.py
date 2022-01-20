@@ -31,8 +31,8 @@ def dutch_df_parser():
     
     dutch.dropna(inplace = True)
     dutch = dutch.drop(index= [9,10,11,12,14,15,16, 17])
-    #dutch = dutch[~dutch.Period.map(lambda x: isinstance(x,int))]
     dutch['Period'] = dutch['Period'].str.extract('(\d+)').astype(int)
+    dutch = dutch.set_index('Period')
     return dutch
 
 
