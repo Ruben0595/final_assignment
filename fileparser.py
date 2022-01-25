@@ -8,9 +8,11 @@ Created on Tue Jan 18 12:59:02 2022
 
 import pandas as pd
 import numpy as np
+import get
 
 def dutch_df_parser():
     dutch_amount = pd.read_csv('Visserij_en_aquacultuur__hoeveelheid_vis__schaal__en_schelpdieren_12012022_113155.csv', sep = ';', skiprows = 4)
+    get.create_report(dutch_amount, 'dutch_amount')
     dutch_amount = dutch_amount.replace('.', np.nan)
     dutch_amount.drop(dutch_amount.columns.difference(['Vissoorten, schaal- en schelpdieren','Noordzee garnalen']), 1, inplace=True)
     dutch_amount = dutch_amount.drop(index = [0,19])
@@ -19,6 +21,7 @@ def dutch_df_parser():
     dutch_amount = dutch_amount.rename(columns={'Vissoorten, schaal- en schelpdieren' : 'Period', 'Noordzee garnalen' : 'catch'})
     
     dutch_price = pd.read_csv('Visserij_en_aquacultuur__prijzen_verse_vis__schaal__en_schelpdieren_14012022_175156.csv', sep = ';', skiprows = 4)
+    get.create_report(dutch_price, 'dutch_price')
     dutch_price = dutch_price.replace('.', np.nan)
     dutch_price.drop(dutch_price.columns.difference(['Vissoorten, schaal- en schelpdieren','Noordzee garnalen']), 1, inplace=True)
     dutch_price = dutch_price.drop(index = [0,18])
@@ -30,7 +33,7 @@ def dutch_df_parser():
     dutch['value'] = dutch['catch'] * dutch['price']
     
     dutch.dropna(inplace = True)
-    dutch = dutch.drop(index= [9,10,11,12,14,15,16, 17])
+    dutch = dutch.drop(index= [9,10,11,12,14,15,16, 17])    #TODO: this should be done better, check wheter there is str and delete those rows
     dutch['Period'] = dutch['Period'].str.extract('(\d+)').astype(int)
     dutch = dutch.set_index('Period')
     return dutch
@@ -38,6 +41,7 @@ def dutch_df_parser():
 
 def european_df_parser():
     european = pd.read_csv('YEARLY_AQUACULTURE_EN.csv', sep = ';')
+    get.create_report(european, 'european')
     european = european[european["main_commercial_species"].str.contains("Shrimp")==True]
     european.drop(['commodity_group','preservation', 'presentation'], 1, inplace=True)
     european.dropna(inplace = True)
@@ -45,7 +49,7 @@ def european_df_parser():
     european['volume(kg)'] = european['volume(kg)'].str.extract('(\d+)').astype(int)
     european['price'] = european['price'].apply(lambda x: x.replace(',','.'))
     european['price'] = european['price'].str.extract(r'(\d+.\d+)').astype(float)
-    european['price'] = european['price'][european['price'] < 10] #prices above €10 per kg are extremely unlikely and probably mistakes in the data
+    european['price'] = european['price'][european['price'] < 10] #prices above €10 per kg are extremely unlikely and probably mistakes in the data (getting rid of outliers)
     european.dropna(inplace = True)
     
     #create unique list of names
