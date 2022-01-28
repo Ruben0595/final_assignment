@@ -16,3 +16,5 @@ The script outputs plots, which show shrimp prices per kg over time(years) and a
 
 ## room for improvement:
 this script could be improved a lot, it was first progammed in a main file without using functions, after which the code was put into functions. this is visible in the way, that the program does not seem to be object oriented programmed. also, the structure of the script could be way better and using a uniformal styling (PEP8) is needed. aside from this, lots of dataframes are made, which is not nessecary, this could be done more efficient. also, the entire code is not optimized for speed, which could also enhanced a lot.
+
+### it is important to use main2, since main branch got broken because of a too big file in the history
