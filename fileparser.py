@@ -12,6 +12,18 @@ import get
 
 
 def temperature_parser():
+    """
+    this function takes a dataframe of temperatures around the entire world. the 
+    temperatures of (the cities in the country of) interest are filtered and grouped, 
+    so an average could be calculated for the entire country of interest
+
+    Returns
+    a dataframe with the annual averaged temperatures of the countries of interest
+    -------
+    europ_temps : TYPE
+        DESCRIPTION.
+
+    """
     temperatures = pd.read_csv('city_temperature.csv')
     temperatures_spain = temperatures[temperatures['Country'].str.contains("Spain")==True]
     temperatures_spain.drop(['Region', 'State', 'City', 'Month', 'Day'], 1, inplace = True)
@@ -36,6 +48,13 @@ def temperature_parser():
     
 
 def dutch_df_parser():
+    """
+    this function extracts the needed data from the two databases.
+    
+    RETURNS:
+    dataframe which consists price, revenue and amount of catched shrimps annualy
+    """
+    
     dutch_amount = pd.read_csv('Visserij_en_aquacultuur__hoeveelheid_vis__schaal__en_schelpdieren_12012022_113155.csv', sep = ';', skiprows = 4)
     get.create_report(dutch_amount, 'dutch_amount')
     dutch_amount = dutch_amount.replace('.', np.nan)
@@ -65,6 +84,17 @@ def dutch_df_parser():
 
 
 def european_df_parser():
+    """
+    this function creates a dataframe with the countries' shrimp catchery of
+    interest from a large european database
+
+    Returns
+    a dicttionary with lists in it, containing the relevant information per country
+    -------
+    DataFrameDict : TYPE
+        DESCRIPTION.
+
+    """
     european = pd.read_csv('YEARLY_AQUACULTURE_EN.csv', sep = ';')
     get.create_report(european, 'european')
     european = european[european["main_commercial_species"].str.contains("Shrimp")==True]

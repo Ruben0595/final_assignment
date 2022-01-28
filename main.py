@@ -34,4 +34,4 @@ def main():
     return correlation
 
 if __name__ == '__main__':
-    correlation = main()
+    correlation = main()    #'correlation =' in front of main, so correlation is visible in variable explorer

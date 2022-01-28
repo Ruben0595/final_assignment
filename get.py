@@ -10,6 +10,15 @@ import pandas as pd
 import plotly.graph_objects as go
 
 def price_df(dutch, Spain, Portugal, timeperiod):
+    """
+    this function extracts the shrimp prices from different databases and puts it in one
+    database, containing the shrimp prices of the countries of interest.
+
+    Returns
+    -------
+    prices : dataframe containing the shrimp prices of the countries of interest.
+
+    """
     timeperiod = timeperiod
     prices = pd.DataFrame(columns=['year', 'spain', 'portugal', 'dutch', 'int_spain', 'int_portugal', 'int_dutch'])
     prices.set_index('year', inplace = True)
@@ -24,12 +33,44 @@ def price_df(dutch, Spain, Portugal, timeperiod):
     return prices
 
 def create_report(df, filename):
+    """
+    creates a profile of a dataframe from the arguments
+
+    Parameters
+    ----------
+    df : pandas dataframa
+    filename : str
+        output filename of choice
+
+    Returns
+    -------
+    None.
+
+    """
     # Generate a quick report from our dataset 
     from pandas_profiling import ProfileReport  
     profile = ProfileReport(df, minimal=True)
     profile.to_file(filename+".html")
     
+    
 def df_maker(prices, temps):
+    """
+    this function creates a dataframe containing the prices and temperatures from
+    different databases
+
+    Parameters
+    ----------
+    prices : TYPE
+        DESCRIPTION.
+    temps : TYPE
+        DESCRIPTION.
+
+    Returns
+    -------
+    prices_temps : Dataframe conatining prices and temperatures of countries of interest
+
+    """
+    
     df = pd.DataFrame()
 
     df['year'] = prices['year']
@@ -44,6 +85,21 @@ def df_maker(prices, temps):
     return prices_temps
 
 def figure(prices, nptimeperiod):
+    """
+    this function creates the graphs
+
+    Parameters
+    ----------
+    prices : TYPE
+        DESCRIPTION.
+    nptimeperiod : TYPE
+        DESCRIPTION.
+
+    Returns
+    -------
+    fig : figure, which shows the shrimp prices per kg over time
+
+    """
     inflation = (nptimeperiod - min(nptimeperiod)) * 0.024    #inflation is about 2.4 percent per year
     inflation = inflation+3.5 #inflation line +3.5, so it fits the graph nicely
     
