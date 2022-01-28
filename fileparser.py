@@ -10,6 +10,31 @@ import pandas as pd
 import numpy as np
 import get
 
+
+def temperature_parser():
+    temperatures = pd.read_csv('city_temperature.csv')
+    temperatures_spain = temperatures[temperatures['Country'].str.contains("Spain")==True]
+    temperatures_spain.drop(['Region', 'State', 'City', 'Month', 'Day'], 1, inplace = True)
+    temperatures_spain = temperatures_spain.groupby('Year').mean()
+    
+    temperatures_portugal = temperatures[temperatures['Country'].str.contains("Portugal")==True]
+    temperatures_portugal.drop(['Region', 'State', 'City', 'Month', 'Day'], 1, inplace = True)
+    temperatures_portugal = temperatures_portugal.groupby('Year').mean()
+    
+    temperatures_netherlands = temperatures[temperatures['Country'].str.contains("Netherlands")==True]
+    temperatures_netherlands.drop(['Region', 'State', 'City', 'Month', 'Day'], 1, inplace = True)
+    temperatures_netherlands = temperatures_netherlands.groupby('Year').mean()
+    
+    europ_temps = pd.DataFrame()
+    europ_temps['spain'] = temperatures_spain['AvgTemperature']
+    europ_temps['portugal'] = temperatures_portugal['AvgTemperature']
+    europ_temps['netherlands'] = temperatures_netherlands['AvgTemperature']     #-31, /8
+    europ_temps = europ_temps.subtract(31)
+    europ_temps = europ_temps.divide(other = 1.8)
+    europ_temps.drop(index = range(1995, 2000), inplace = True)
+    return europ_temps
+    
+
 def dutch_df_parser():
     dutch_amount = pd.read_csv('Visserij_en_aquacultuur__hoeveelheid_vis__schaal__en_schelpdieren_12012022_113155.csv', sep = ';', skiprows = 4)
     get.create_report(dutch_amount, 'dutch_amount')
